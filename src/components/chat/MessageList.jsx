@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import MessageItem from "./MessageItem.jsx";
+import ChatInput from "./ChatInput.jsx";
 import "@/assets/style/MessageList.css";
 
 function MessageList() {
@@ -11,6 +12,8 @@ function MessageList() {
 
     const [inputText, setInputText] = useState("");
     const [loading, setLoading] = useState(false);
+
+    const messageEndRef = useRef(null);
 
     const handleSendMessage = () => {
         const trimmedText = inputText.trim();
@@ -52,11 +55,15 @@ function MessageList() {
         }, 1000);
     };
 
-    const handleKeyDown = (e) => {
-        if (e.key === "Enter") {
-            handleSendMessage();
-        }
-    };
+    useEffect(() => {
+        messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
+
+    // const handleKeyDown = (e) => {
+    //     if (e.key === "Enter") {
+    //         handleSendMessage();
+    //     }
+    // };
 
     return (
         <div className="chat-wrap">
@@ -65,15 +72,16 @@ function MessageList() {
                     <MessageItem key={message.id} sender={message.sender} text={message.text} />
                 ))}
 
-                {/* {loading && <MessageItem sender="bot" text="입력 중..." />} */}
+                <div ref={messageEndRef} />
             </main>
 
-            <div className="chat-input-area">
-                <input type="text" placeholder="메시지를 입력하세요" value={inputText} onChange={(e) => setInputText(e.target.value)} onKeyDown={handleKeyDown} />
-                <button onClick={handleSendMessage} disabled={loading}>
-                    {loading ? "전송 중..." : "전송"}
-                </button>
-            </div>
+            <ChatInput
+                inputText={inputText}
+                setInputText={setInputText}
+                handleSendMessage={handleSendMessage}
+                loading={loading}
+                //  handleKeyDown={handleKeyDown}
+            />
         </div>
     );
 }

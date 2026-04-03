@@ -7,15 +7,14 @@ import MessageList from "./components/chat/MessageList";
 import "./App.css";
 
 function App() {
-  return (
-    <div className="app">
-      <div className="chat-container">
-        <ChatHeader />
-        <MessageList />
-        {/* <ChatInput /> */}
-      </div>
-    </div>
-  );
+    return (
+        <div className="app">
+            <div className="chat-container">
+                <ChatHeader />
+                <MessageList />
+            </div>
+        </div>
+    );
 }
 
 export default App;
